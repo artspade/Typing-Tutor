@@ -3,6 +3,8 @@ package view;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 
 /**
  * 
@@ -18,7 +20,7 @@ public class GUI extends JFrame
 	private static final String PROGRAM_TITLE = "Typing Tutor";
 	private static int FRAME_WIDTH = 500;
 	private static int FRAME_HEIGHT = 500;
-	private  String myFrameTitle;
+	private JPanel myTextPanel;
 	//private JMenuBar myMenuBar; //TO-DO new game, save, load, etc...
 	
 	/**
@@ -29,7 +31,7 @@ public class GUI extends JFrame
 	{
 		//myMenuBar = new GuiMenu();
 		//this.setJMenuBar(myMenuBar);
-		myFrameTitle = PROGRAM_TITLE;
+		myTextPanel = new GuiTextPanel(this);
 	}
 
 	/**
@@ -53,9 +55,10 @@ public class GUI extends JFrame
 	private void setFrameVars()
 	{
 		this.setVisible(true);
-		this.setTitle(myFrameTitle);
+		this.setTitle(PROGRAM_TITLE);
 		this.setMinimumSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.add(myTextPanel);
 	}
 	
 	
