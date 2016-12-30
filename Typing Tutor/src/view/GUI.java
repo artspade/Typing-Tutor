@@ -1,37 +1,49 @@
 package view;
 
 import java.awt.Dimension;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-
 /**
+ * The primary class for representing the GUI. This class is a JFrame.
  * 
  * @author Rowan Meier
- *
  */
-public class GUI extends JFrame 
+public class GUI extends JFrame
 {
 	/**
-	 * 
+	 * Generated serial ID
 	 */
-	private static final long serialVersionUID = 6737679650177968755L;
-	private static final String PROGRAM_TITLE = "Typing Tutor";
-	private static int FRAME_WIDTH = 500;
-	private static int FRAME_HEIGHT = 500;
-	private JPanel myTextPanel;
-	//private JMenuBar myMenuBar; //TO-DO new game, save, load, etc...
-	
+	private static final long	serialVersionUID	= 6737679650177968755L;
+	/**
+	 * Constant used for setting this JFrame's title.
+	 */
+	private static final String	PROGRAM_TITLE		= "Typing Tutor";
+	/**
+	 * Constant used for setting this JFrame's width
+	 */
+	private static final int	FRAME_WIDTH			= 500;
+	/**
+	 * Constant used for setting this JFrame's height.
+	 */
+	private static final int	FRAME_HEIGHT		= 500;
+	/**
+	 * JPanel that will be used to display the text that needs to be typed.
+	 */
+	private JPanel				myTextPanel;
+
+	private File myTextFile;
+
 	/**
 	 * Default constructor for GUI. Instantiates all private objects.
-	 * myFrameTitle defaults to... "Typing Tutor"
 	 */
 	public GUI()
 	{
-		//myMenuBar = new GuiMenu();
-		//this.setJMenuBar(myMenuBar);
-		myTextPanel = new GuiTextPanel(this);
+		myTextFile = new File(
+				"C:\\Users\\rowan\\Desktop\\Eclipse_Java_Workspace\\Typing Tutor\\src\\recources\\words_to_type.txt");
+		myTextPanel = new GuiTextPanel(this, myTextFile);
 	}
 
 	/**
@@ -42,13 +54,7 @@ public class GUI extends JFrame
 		setFrameVars();
 		pack();
 	}
-	
-	/**
-	 * Returns the string representation of a file.
-	 * @return
-	 */
-	
-	
+
 	/**
 	 * Sets up the frame variables.
 	 */
@@ -60,6 +66,5 @@ public class GUI extends JFrame
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.add(myTextPanel);
 	}
-	
-	
+
 }

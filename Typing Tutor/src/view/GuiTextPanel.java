@@ -2,6 +2,7 @@ package view;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.File;
@@ -15,122 +16,192 @@ import javax.swing.JPanel;
 
 import model.ComparisonGrid;
 
-public class GuiTextPanel extends JPanel implements Observer {
+/**
+ * This class is used for displaying text to type using paintComponent
+ * 
+ * @author Rowan Meier
+ */
+public class GuiTextPanel extends JPanel implements Observer
+{
 
 	/**
-	 * 
+	 * Generated serial ID
 	 */
 	private static final long serialVersionUID = -1421873357843121287L;
-	
-	// private TextBuilder myTextBuilder;
-	private String myTargetString;
-	private ComparisonGrid myComparisonGrid;
 
-	public GuiTextPanel(JFrame theFrame) {
-		myTargetString = getFileText(
-				"C:\\Users\\rowan\\Desktop\\Eclipse_Java_Workspace\\Typing Tutor\\src\\recources\\words_to_type.txt");
+	/**
+	 * The size of the font that will be displayed on the JPanel
+	 */
+	private static final int	TEXT_FONT_SIZE		= 20;
+	/**
+	 * The Default X-position for text drawn
+	 */
+	private static final int	X_DEFAULT_POSITION	= 10;
+	/**
+	 * The Default Y-position for text drawn
+	 */
+	private static final int	Y_DEFAULT_POSITION	= 25;
+
+	/**
+	 * The string that we are trying to match against .
+	 */
+	private String			myTargetString;
+	/**
+	 * ComparisonGrid used to determine the correct format for each character
+	 * displayed to the screen.
+	 */
+	private ComparisonGrid	myComparisonGrid;
+
+	/**
+	 * Constructor for the GuiTextPanel
+	 * 
+	 * @param theFrame
+	 *            The JFrame that this class will be displayed on
+	 * @param theFile
+	 *            The text file that will be displayed using the paintComponent
+	 *            method
+	 */
+	public GuiTextPanel(JFrame theFrame, File theFile)
+	{
+		myTargetString = getFileText(theFile);
 		myComparisonGrid = new ComparisonGrid(myTargetString, this);
 		theFrame.addKeyListener(myComparisonGrid);
-		//this.addKeyListener(myComparisonGrid);
-		
+
 		setPanelSettings();
+
+	}
+
+	/**
+	 * This method sets all of the JPanel settings. such as Background color...
+	 */
+	private void setPanelSettings()
+	{
+		this.setBackground(Color.WHITE);
+
 		setFocusable(true);
 		setVisible(true);
-
 	}
 
-	private void setPanelSettings() {
-		this.setBackground(Color.WHITE);
-	}
-
-	private String getFileText(String theFilePath) {
+	/**
+	 * This method returns the text that is contained in the passed File
+	 * variable.
+	 * 
+	 * @param theFile
+	 *            the file that we want text from
+	 * @return the string containing the text from the File.
+	 */
+	private String getFileText(File theFile)
+	{
 		String toReturn = "";
-		try {
-			Scanner input = new Scanner(new File(theFilePath));
-			while (input.hasNext()) {
+		try
+		{
+			Scanner input = new Scanner(theFile);
+			while (input.hasNext())
+			{
 				toReturn += input.next() + " ";
 			}
 			input.close();
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (FileNotFoundException e)
+		{
 			e.printStackTrace();
 		}
 		return toReturn;
 	}
 
 	@Override
-	public void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g)
+	{
 		super.paintComponent(g);
 		drawText(g);
 	}
 
-	private void drawText(Graphics g)// needs to do text wrap.
+	/**
+	 * This method is called from paintComponent. This method correctly displays
+	 * the text from myTargetString based on values contained in
+	 * myComparisonGrid.
+	 * 
+	 * @param g
+	 *            the Graphics object we are using in paintComponent.
+	 */
+	private void drawText(Graphics g)
 	{
 		Graphics2D g2d = (Graphics2D) g;
 		char[] theCharsToDraw = myTargetString.toCharArray();
 
-		for (int i = 0; i < theCharsToDraw.length; i++) {
+		int x = X_DEFAULT_POSITION;
+		int y = Y_DEFAULT_POSITION;
+		for (int i = 0; i < theCharsToDraw.length; i++)
+		{
 
-			if (myComparisonGrid.getMyComparisonGrid() != null && myComparisonGrid.getMyComparisonGrid().size() > i) {
+			if (myComparisonGrid.getMyComparisonGrid() != null
+					&& myComparisonGrid.getMyComparisonGrid().size() > i)
+			{
 
-				switch (myComparisonGrid.getMyComparisonGrid().get(i)) {
-				case 3:
-					g2d.setColor(Color.GRAY);
-					g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-					break;
-				case 0:
-					g2d.setColor(Color.GREEN);
-					g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-					break;
-				case 1:
-					g2d.setColor(Color.RED);
-					g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-					break;
-				case 2:
-					g2d.setColor(Color.RED);
-					g2d.setFont(new Font("TimesRoman", Font.ITALIC, 20));
-					break;
+				switch (myComparisonGrid.getMyComparisonGrid().get(i))
+				{
+					case 3:
+						g2d.setColor(Color.GRAY);
+						Font theFont3 = new Font("TimesRoman", Font.PLAIN,
+								TEXT_FONT_SIZE);
+						g2d.setFont(theFont3);
+						break;
+					case 0:
+						g2d.setColor(Color.GREEN);
+						Font theFont0 = new Font("TimesRoman", Font.PLAIN,
+								TEXT_FONT_SIZE);
+						g2d.setFont(theFont0);
+						break;
+					case 1:
+						g2d.setColor(Color.RED);
+						Font theFont1 = new Font("TimesRoman", Font.PLAIN,
+								TEXT_FONT_SIZE);
+						g2d.setFont(theFont1);
+						break;
+					case 2:
+						g2d.setColor(Color.RED);
+						Font theFont2 = new Font("TimesRoman", Font.ITALIC,
+								TEXT_FONT_SIZE);
+						g2d.setFont(theFont2);
+						break;
 				}
-			} else {
+
+			}
+			else
+			{
 				g2d.setColor(Color.BLACK);
-				g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+				g2d.setFont(new Font("TimesRoman", Font.PLAIN, TEXT_FONT_SIZE));
 			}
 
-			/*
-			 * if(myComparisonGrid.get(i) == -1) { g2d.setColor(Color.GRAY);
-			 * g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20)); } else {
-			 * if(myComparisonGrid.get(i) == 0) {
-			 * 
-			 * } else { if(myComparisonGrid.get(i) == 1) {
-			 * 
-			 * } else { if(myComparisonGrid.get(i) == 2) {
-			 * 
-			 * } } } }
-			 */
+			FontMetrics metrics = g2d.getFontMetrics();
+			int metricHgt = metrics.getHeight();
+			int metricLetterWidth = metrics.stringWidth(theCharsToDraw[i] + "");
 
-			int x = (i * 10) % 500;
-			int y = (((i * 10) / 500) * 25) + 25;
+			if ((x + metricLetterWidth) > this.getWidth())
+			{
+				y += metricHgt;
+				x = X_DEFAULT_POSITION;
+			}
+
 			g2d.drawString(theCharsToDraw[i] + "", x, y);
 
-			// g2d.drawChars(theCharsToDraw, 1, 10 , 0, 25);
+			x += metricLetterWidth;
+
 		}
-		// g2d.drawChars(theCharsToDraw, 1, 1 , 0, 25);
-		// g2d.drawChars(theCharsToDraw, 0, theCharsToDraw.length-2 , 0, 25);
 
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
+	public void update(Observable o, Object arg)
+	{
 
-		System.out.println("In GuiTextPanel Update");
-		if (arg instanceof ComparisonGrid) {
+		if (arg instanceof ComparisonGrid)
+		{
 			myComparisonGrid = (ComparisonGrid) arg;
-			System.out.println("In GuiTextPanel Update ComparisonGrid Found");
 		}
 		repaint();
 
 	}
-
 
 }
